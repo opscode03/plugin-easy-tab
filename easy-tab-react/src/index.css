@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #536c5a;
+  --primary-hover: #405646;
+  --danger: #a34a44;
+  --bg: #f3f4ef;
+  --surface: #fbfbf7;
+  --soft: #e7ece4;
+  --border: #d9ded5;
+  --text: #252a26;
+  --text-sub: #626c64;
+  --overlay: rgba(23, 29, 24, 0.32);
+  --wallpaper-overlay: rgba(243, 244, 239, 0.78);
+  --shadow-search: 0 12px 36px rgba(39, 52, 42, 0.07);
+  --shadow-dialog: 0 24px 80px rgba(23, 29, 24, 0.16);
+  color-scheme: light;
+}
+
+:root.dark {
+  --primary: #a9beac;
+  --primary-hover: #c3d3c4;
+  --danger: #d38a82;
+  --bg: #171b18;
+  --surface: #202620;
+  --soft: #29322b;
+  --border: #343d35;
+  --text: #e9ece6;
+  --text-sub: #a1aaa2;
+  --overlay: rgba(5, 8, 6, 0.62);
+  --wallpaper-overlay: rgba(23, 27, 24, 0.72);
+  --shadow-search: none;
+  --shadow-dialog: none;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    min-width: 320px;
+    background: var(--bg);
+  }
+
+  body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text);
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(circle at 12% 4%, var(--soft) 0, transparent 34%),
+      radial-gradient(circle at 90% 96%, var(--soft) 0, transparent 28%);
+    font-family: theme("fontFamily.body");
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  a,
+  input,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :where(button, a, input, select):focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    color: var(--text);
+    background: var(--soft);
+  }
+}
+
+@layer components {
+  .icon-button {
+    @apply inline-grid h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-muted transition-colors hover:bg-sage-soft hover:text-ink;
+  }
+
+  .button {
+    @apply min-h-11 rounded-[10px] px-4 text-sm font-medium transition active:scale-[0.98] disabled:cursor-wait disabled:opacity-50;
+  }
+
+  .button-primary {
+    @apply button bg-sage text-canvas hover:bg-sage-hover;
+  }
+
+  .button-secondary {
+    @apply button border border-line text-ink hover:bg-sage-soft;
+  }
+
+  .field-input {
+    @apply h-11 w-full rounded-[10px] border border-line bg-canvas px-3 text-sm text-ink outline-none transition placeholder:text-ink-muted hover:border-sage focus:border-sage focus:ring-[3px] focus:ring-sage-soft;
+  }
+
+  .dialog-header {
+    @apply flex items-start justify-between gap-4 border-b border-line p-6 max-[480px]:p-5;
+  }
+
+  .dialog-title {
+    @apply mt-1 font-display text-2xl font-medium leading-tight;
+  }
+
+  .dialog-eyebrow {
+    @apply m-0 text-xs font-semibold tracking-[0.12em] text-sage;
+  }
+}
+
+.reveal {
+  animation: reveal 420ms both cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dialog-enter {
+  animation: dialog-enter 200ms ease-out;
+}
+
+.side-enter {
+  animation: side-enter 240ms ease-out;
+}
+
+.skeleton {
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dialog-enter {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes side-enter {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

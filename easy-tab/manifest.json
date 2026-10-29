@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Easy Tab · 轻量新标签页",
+  "version": "1.0.0",
+  "description": "一个轻量、简洁的新标签页，提供时间、搜索和常用入口。",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  }
+}

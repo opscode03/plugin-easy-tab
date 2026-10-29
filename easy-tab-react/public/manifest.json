@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Easy Tab · 轻量新标签页",
+  "version": "1.0.0",
+  "description": "使用 React 构建的轻量新标签页，提供时间、搜索和常用入口。",
+  "permissions": ["storage", "bookmarks", "favicon"],
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  }
+}

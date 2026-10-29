@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>Easy Tab · 轻量新标签页</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="mock.js" defer></script>
+  <script src="api.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-panels-top-left" viewBox="0 0 24 24">
+      <rect width="18" height="18" x="3" y="3" rx="2"/>
+      <path d="M3 9h18M9 21V9"/>
+    </symbol>
+    <symbol id="icon-settings-2" viewBox="0 0 24 24">
+      <path d="M20 7h-9M14 17H5"/>
+      <circle cx="17" cy="17" r="3"/>
+      <circle cx="7" cy="7" r="3"/>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.3-4.3"/>
+    </symbol>
+    <symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
+      <path d="M7 17 17 7M7 7h10v10"/>
+    </symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24">
+      <path d="M5 12h14M12 5v14"/>
+    </symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24">
+      <path d="M18 6 6 18M6 6l12 12"/>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="M20 6 9 17l-5-5"/>
+    </symbol>
+    <symbol id="icon-trash-2" viewBox="0 0 24 24">
+      <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>
+    </symbol>
+    <symbol id="icon-pencil" viewBox="0 0 24 24">
+      <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+    </symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24">
+      <path d="m6 9 6 6 6-6"/>
+    </symbol>
+  </svg>
+
+  <a class="skip-link" href="#mainContent">跳至主要内容</a>
+
+  <header class="topbar reveal">
+    <div class="brand" aria-label="Easy Tab">
+      <span class="brand-mark">
+        <svg class="icon" aria-hidden="true"><use href="#icon-panels-top-left"></use></svg>
+      </span>
+      <span>easy tab</span>
+    </div>
+    <button class="icon-button" id="openSettings" type="button" aria-label="打开设置" title="设置">
+      <svg class="icon" aria-hidden="true"><use href="#icon-settings-2"></use></svg>
+    </button>
+  </header>
+
+  <main class="main-content" id="mainContent">
+    <section class="hero" aria-label="当前时间">
+      <p class="date reveal" id="currentDate"></p>
+      <time class="clock reveal" id="clock">--:--</time>
+      <p class="greeting reveal" id="greeting">你好，今天想做点什么？</p>
+    </section>
+
+    <form class="search-bar reveal" id="searchForm" role="search" novalidate>
+      <svg class="icon search-icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+      <label class="sr-only" for="searchInput">搜索或输入网址</label>
+      <input id="searchInput" type="text" placeholder="搜索或输入网址" autocomplete="off" spellcheck="false" aria-describedby="searchError">
+      <div class="search-actions">
+        <div class="engine-control">
+          <label class="sr-only" for="engineSelect">选择搜索引擎</label>
+          <select id="engineSelect" aria-label="搜索引擎"></select>
+          <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+        </div>
+        <button class="search-submit" type="submit" aria-label="搜索" title="搜索">
+          <svg class="icon" aria-hidden="true"><use href="#icon-arrow-up-right"></use></svg>
+        </button>
+      </div>
+    </form>
+    <p class="form-error search-error" id="searchError" role="alert" hidden></p>
+
+    <section class="shortcuts-section reveal" aria-labelledby="shortcutsTitle">
+      <div class="section-heading">
+        <h2 id="shortcutsTitle">常用入口</h2>
+        <button class="text-button" id="manageShortcuts" type="button" aria-pressed="false">
+          <svg class="icon" aria-hidden="true"><use id="manageIcon" href="#icon-pencil"></use></svg>
+          <span id="manageLabel">管理</span>
+        </button>
+      </div>
+      <div class="shortcut-grid" id="shortcutGrid" aria-busy="true">
+        <div class="shortcut-skeleton" aria-hidden="true"><span></span><i></i></div>
+        <div class="shortcut-skeleton" aria-hidden="true"><span></span><i></i></div>
+        <div class="shortcut-skeleton" aria-hidden="true"><span></span><i></i></div>
+        <div class="shortcut-skeleton" aria-hidden="true"><span></span><i></i></div>
+        <div class="shortcut-skeleton" aria-hidden="true"><span></span><i></i></div>
+        <div class="shortcut-skeleton" aria-hidden="true"><span></span><i></i></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>数据仅保存在此浏览器</span>
+    <span class="keyboard-hint"><kbd>/</kbd> 快速搜索</span>
+  </footer>
+
+  <dialog class="side-dialog" id="settingsDialog" aria-labelledby="settingsTitle">
+    <div class="side-panel">
+      <header class="dialog-header">
+        <div>
+          <p class="eyebrow">个性化</p>
+          <h2 id="settingsTitle">让新标签页更合心意</h2>
+        </div>
+        <button class="icon-button" type="button" data-close="settingsDialog" aria-label="关闭设置">
+          <svg class="icon" aria-hidden="true"><use href="#icon-x"></use></svg>
+        </button>
+      </header>
+      <form id="settingsForm">
+        <div class="settings-content">
+          <div class="field">
+            <label for="userName">称呼</label>
+            <input id="userName" name="userName" type="text" maxlength="12" placeholder="如何称呼你（可选）">
+            <p class="field-help">留空则使用默认问候。</p>
+          </div>
+
+          <fieldset class="field">
+            <legend>外观</legend>
+            <div class="segmented">
+              <label>
+                <input type="radio" name="theme" value="system">
+                <span>跟随系统</span>
+              </label>
+              <label>
+                <input type="radio" name="theme" value="light">
+                <span>浅色</span>
+              </label>
+              <label>
+                <input type="radio" name="theme" value="dark">
+                <span>深色</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="settingsEngine">默认搜索引擎</label>
+            <div class="select-control">
+              <select id="settingsEngine" name="settingsEngine"></select>
+              <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+            </div>
+          </div>
+
+          <div class="switch-row">
+            <div>
+              <label for="showSeconds">显示秒数</label>
+              <p class="field-help">时间将显示为“时:分:秒”。</p>
+            </div>
+            <input class="switch" id="showSeconds" name="showSeconds" type="checkbox" role="switch">
+          </div>
+        </div>
+        <p class="form-error settings-error" id="settingsError" role="alert" hidden></p>
+        <footer class="dialog-actions">
+          <button class="button secondary" type="button" data-close="settingsDialog">取消</button>
+          <button class="button primary" id="saveSettings" type="submit"><span>保存设置</span></button>
+        </footer>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog class="modal-dialog" id="shortcutDialog" aria-labelledby="shortcutDialogTitle">
+    <div class="modal-panel">
+      <header class="dialog-header">
+        <div>
+          <p class="eyebrow">常用入口</p>
+          <h2 id="shortcutDialogTitle">添加入口</h2>
+        </div>
+        <button class="icon-button" type="button" data-close="shortcutDialog" aria-label="关闭入口编辑">
+          <svg class="icon" aria-hidden="true"><use href="#icon-x"></use></svg>
+        </button>
+      </header>
+      <form id="shortcutForm" novalidate>
+        <input id="shortcutId" type="hidden">
+        <div class="modal-body">
+          <div class="field">
+            <label for="shortcutName">名称</label>
+            <input id="shortcutName" type="text" maxlength="12" placeholder="例如：开发者文档" required aria-describedby="shortcutFormError">
+          </div>
+          <div class="field">
+            <label for="shortcutUrl">网址</label>
+            <input id="shortcutUrl" type="text" inputmode="url" placeholder="example.com" required aria-describedby="urlHelp shortcutFormError">
+            <p class="field-help" id="urlHelp">无需输入 https://</p>
+          </div>
+          <p class="form-error" id="shortcutFormError" role="alert" hidden></p>
+        </div>
+        <footer class="dialog-actions">
+          <button class="button secondary" type="button" data-close="shortcutDialog">取消</button>
+          <button class="button primary" id="saveShortcut" type="submit"><span>保存入口</span></button>
+        </footer>
+      </form>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+    <span id="toastMessage"></span>
+    <button id="toastAction" type="button" hidden>撤销</button>
+  </div>
+
+  <noscript>请启用 JavaScript，以使用搜索、快捷入口和设置功能。</noscript>
+</body>
+</html>
