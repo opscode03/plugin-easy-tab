@@ -1,14 +1,14 @@
 export const SEARCH_ENGINES = [
-  { id: "bing", label: "必应", url: "https://www.bing.com/search?q={query}" },
-  { id: "google", label: "Google", url: "https://www.google.com/search?q={query}" },
   { id: "baidu", label: "百度", url: "https://www.baidu.com/s?wd={query}" },
-  { id: "duckduckgo", label: "DuckDuckGo", url: "https://duckduckgo.com/?q={query}" }
+  { id: "bing", label: "必应", url: "https://www.bing.com/search?q={query}" },
+  // { id: "deepseek", label: "DeepSeek", url: "https://chat.deepseek.com/?q={query}", type: "ai" },
+  // { id: "google", label: "Google", url: "https://www.google.com/search?q={query}" },
 ];
 
 const DEFAULT_STATE = {
   name: "",
-  theme: "system",
-  engine: "bing",
+  theme: "light",
+  engine: "baidu",
   timeDisplay: "hero",
   timeFormat: "24",
   showSeconds: false,

@@ -6,19 +6,20 @@ import Select from "./Select";
 export default function SearchBar({ engine, openTarget, onEngineChange, inputRef }) {
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
+  const selectedEngine = SEARCH_ENGINES.find((item) => item.id === engine) || SEARCH_ENGINES[0];
+  const isAi = selectedEngine.type === "ai";
 
   function handleSubmit(event) {
     event.preventDefault();
     const value = query.trim();
     if (!value) {
-      setError("输入关键词或网址后再搜索。");
+      setError(isAi ? "输入问题后再发起对话。" : "输入关键词或网址后再搜索。");
       inputRef.current?.focus();
       return;
     }
 
-    const selectedEngine = SEARCH_ENGINES.find((item) => item.id === engine) || SEARCH_ENGINES[0];
     const isUrl = !/\s/.test(value) && (/^https?:\/\//i.test(value) || /^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(value));
-    const target = isUrl
+    const target = !isAi && isUrl
       ? (/^https?:\/\//i.test(value) ? value : `https://${value}`)
       : selectedEngine.url.replace("{query}", encodeURIComponent(value));
     if (openTarget === "new") {
@@ -37,14 +38,14 @@ export default function SearchBar({ engine, openTarget, onEngineChange, inputRef
         onSubmit={handleSubmit}
       >
         <Search className="h-5 w-5 shrink-0 text-ink-muted" strokeWidth={1.7} aria-hidden="true" />
-        <label className="sr-only" htmlFor="search-input">搜索或输入网址</label>
+        <label className="sr-only" htmlFor="search-input">{isAi ? "输入问题，开始 AI 对话" : "搜索或输入网址"}</label>
         <input
           ref={inputRef}
           id="search-input"
           className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-ink-muted"
           type="text"
           value={query}
-          placeholder="搜索或输入网址"
+          placeholder={isAi ? "输入问题，开始 AI 对话" : "搜索或输入网址"}
           autoComplete="off"
           spellCheck="false"
           aria-invalid={Boolean(error)}
@@ -57,7 +58,7 @@ export default function SearchBar({ engine, openTarget, onEngineChange, inputRef
         <div className="flex shrink-0 items-center gap-2 max-[480px]:gap-1">
           <Select
             id="engine-select"
-            ariaLabel="选择搜索引擎"
+            ariaLabel="选择搜索服务"
             variant="ghost"
             value={engine}
             options={SEARCH_ENGINES.map((item) => ({ value: item.id, label: item.label }))}
@@ -66,8 +67,8 @@ export default function SearchBar({ engine, openTarget, onEngineChange, inputRef
           <button
             className="grid h-11 w-11 shrink-0 place-items-center rounded-[14px] bg-sage text-canvas transition hover:bg-sage-hover active:scale-95"
             type="submit"
-            aria-label="搜索"
-            title="搜索"
+            aria-label={isAi ? "打开 AI 对话" : "搜索"}
+            title={isAi ? "打开 AI 对话" : "搜索"}
           >
             <ArrowUpRight className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
           </button>

@@ -339,10 +339,10 @@ export default function SettingsDialog({ open, settings, onClose, onSave }) {
             </fieldset>
 
             <div>
-              <label className="mb-2 block text-sm font-medium" htmlFor="settings-engine">默认搜索引擎</label>
+              <label className="mb-2 block text-sm font-medium" htmlFor="settings-engine">默认搜索服务</label>
               <Select
                 id="settings-engine"
-                ariaLabel="默认搜索引擎"
+                ariaLabel="默认搜索服务"
                 value={draft.engine}
                 options={SEARCH_ENGINES.map((engine) => ({ value: engine.id, label: engine.label }))}
                 onChange={(engine) => setDraft({ ...draft, engine })}

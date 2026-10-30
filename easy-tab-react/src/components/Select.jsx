@@ -3,7 +3,7 @@ import { Check, ChevronDown } from "lucide-react";
 
 const TRIGGER_VARIANTS = {
   field: "field-input pr-9",
-  ghost: "h-10 w-[82px] rounded-[10px] bg-transparent pl-2 pr-7 text-[13px] text-ink-muted outline-none transition hover:bg-sage-soft hover:text-ink focus-visible:bg-sage-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-sage max-[480px]:w-[68px] max-[480px]:pl-1 max-[480px]:text-xs"
+  ghost: "h-10 w-[96px] rounded-[10px] bg-transparent pl-2 pr-7 text-[13px] text-ink-muted outline-none transition hover:bg-sage-soft hover:text-ink focus-visible:bg-sage-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-sage max-[480px]:w-[84px] max-[480px]:pl-1 max-[480px]:text-xs"
 };
 
 const LIST_VARIANTS = {
