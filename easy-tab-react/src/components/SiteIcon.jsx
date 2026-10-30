@@ -22,6 +22,7 @@ export default function SiteIcon({ url, size = 32, className = "", fallback }) {
       src={iconUrl}
       alt=""
       aria-hidden="true"
+      draggable={false}
       onError={() => setFailedUrl(url)}
     />
   );

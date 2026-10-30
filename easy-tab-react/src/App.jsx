@@ -21,7 +21,6 @@ export default function App() {
   const stateRef = useRef(state);
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(() => new Date());
-  const [managing, setManaging] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutEditor, setShortcutEditor] = useState({ open: false, shortcut: null });
   const [bookmarkImportOpen, setBookmarkImportOpen] = useState(false);
@@ -76,11 +75,10 @@ export default function App() {
         event.preventDefault();
         searchInputRef.current?.focus();
       }
-      if (event.key === "Escape" && managing && !hasOpenDialog) setManaging(false);
     }
     document.addEventListener("keydown", handleKeydown);
     return () => document.removeEventListener("keydown", handleKeydown);
-  }, [managing, state.showSearch]);
+  }, [state.showSearch]);
 
   useEffect(() => {
     if (!toast) return undefined;
@@ -269,8 +267,6 @@ export default function App() {
             density={state.shortcutDensity}
             openTarget={state.openTarget}
             loading={loading}
-            managing={managing}
-            onToggleManaging={() => setManaging((value) => !value)}
             onAdd={() => setShortcutEditor({ open: true, shortcut: null })}
             onEdit={(shortcut) => setShortcutEditor({ open: true, shortcut })}
             onDelete={handleDeleteShortcut}
