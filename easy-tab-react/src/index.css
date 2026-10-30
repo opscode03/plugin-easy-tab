@@ -8,6 +8,9 @@
   --danger: #a34a44;
   --bg: #f3f4ef;
   --surface: #fbfbf7;
+  --shortcut-glass: rgba(251, 251, 247, 0.66);
+  --shortcut-glass-hover: rgba(251, 251, 247, 0.86);
+  --shortcut-border: rgba(83, 108, 90, 0.14);
   --soft: #e7ece4;
   --border: #d9ded5;
   --text: #252a26;
@@ -25,6 +28,9 @@
   --danger: #d38a82;
   --bg: #171b18;
   --surface: #202620;
+  --shortcut-glass: rgba(32, 38, 32, 0.58);
+  --shortcut-glass-hover: rgba(41, 50, 43, 0.82);
+  --shortcut-border: rgba(169, 190, 172, 0.16);
   --soft: #29322b;
   --border: #343d35;
   --text: #e9ece6;

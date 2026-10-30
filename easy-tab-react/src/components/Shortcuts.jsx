@@ -7,7 +7,7 @@ function ShortcutContent({ url, mark, name, density, isAdd = false }) {
   const isCompact = density === "compact";
   return (
     <>
-      <span className={`grid ${isCompact ? "h-11 w-11 rounded-xl" : "h-[52px] w-[52px] rounded-2xl"} place-items-center border text-[15px] font-semibold tracking-[-0.02em] transition-colors ${isAdd ? "border-dashed border-line text-ink-muted group-hover:border-sage group-hover:text-sage" : "border-line bg-surface text-sage group-hover:border-sage"}`}>
+      <span className={`grid ${isCompact ? "h-11 w-11 rounded-xl" : "h-[52px] w-[52px] rounded-2xl"} place-items-center border text-[15px] font-semibold tracking-[-0.02em] transition-colors ${isAdd ? "border-dashed border-line text-ink-muted group-hover:border-sage group-hover:text-sage" : "border-[color:var(--shortcut-border)] bg-[var(--shortcut-glass)] text-sage group-hover:border-sage"}`}>
         {isAdd ? mark : (
           <SiteIcon
             url={url}
@@ -357,7 +357,7 @@ export default function Shortcuts({
             {pages.map((page, pageIndex) => (
               <div
                 key={pageIndex}
-                className={`grid w-full shrink-0 snap-start grid-cols-3 content-start gap-x-2 ${isCompact ? "gap-y-4" : "gap-y-6"} px-1 pb-1 sm:grid-cols-8`}
+                className={`grid w-full shrink-0 snap-start grid-cols-3 content-start gap-x-3 ${isCompact ? "gap-y-4" : "gap-y-6"} px-1.5 pb-2 sm:grid-cols-8`}
                 role="group"
                 aria-label={`第 ${pageIndex + 1} 页，共 ${pageCount} 页`}
               >
@@ -367,7 +367,7 @@ export default function Shortcuts({
                     return (
                       <button
                         key={entry.id}
-                        className={`group flex min-w-0 flex-col items-center ${isCompact ? "gap-2" : "gap-3"} rounded-xl transition-transform hover:-translate-y-0.5`}
+                        className={`group flex min-w-0 w-full flex-col items-center justify-center border border-[color:var(--shortcut-border)] bg-[var(--shortcut-glass)] backdrop-blur-lg transition-[transform,background-color,border-color] hover:-translate-y-0.5 hover:border-sage hover:bg-[var(--shortcut-glass-hover)] ${isCompact ? "gap-2 rounded-[14px] px-2 py-3" : "gap-3 rounded-2xl px-2.5 py-4"}`}
                         type="button"
                         aria-label="添加常用入口"
                         onClick={onAdd}
@@ -392,7 +392,7 @@ export default function Shortcuts({
                       onDragOver={(event) => handleDragOver(event, entry.id)}
                     >
                       <a
-                        className={`group flex min-w-0 cursor-grab flex-col items-center ${isCompact ? "gap-2" : "gap-3"} rounded-xl transition-transform hover:-translate-y-0.5 active:cursor-grabbing`}
+                        className={`group flex min-w-0 w-full cursor-grab flex-col items-center justify-center border border-[color:var(--shortcut-border)] bg-[var(--shortcut-glass)] backdrop-blur-lg transition-[transform,background-color,border-color] hover:-translate-y-0.5 hover:border-sage hover:bg-[var(--shortcut-glass-hover)] active:cursor-grabbing ${isCompact ? "gap-2 rounded-[14px] px-2 py-3" : "gap-3 rounded-2xl px-2.5 py-4"}`}
                         href={entry.url}
                         target={openTarget === "new" ? "_blank" : undefined}
                         rel={openTarget === "new" ? "noreferrer" : undefined}
