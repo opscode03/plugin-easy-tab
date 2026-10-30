@@ -146,19 +146,6 @@ export default function SettingsDialog({ open, settings, onClose, onSave }) {
 
         <form className="flex min-h-0 flex-1 flex-col" onSubmit={handleSubmit}>
           <div className="grid flex-1 content-start gap-7 overflow-y-auto p-6 max-[480px]:p-5">
-            <div>
-              <label className="mb-2 block text-sm font-medium" htmlFor="user-name">称呼</label>
-              <input
-                id="user-name"
-                className="field-input"
-                type="text"
-                maxLength={12}
-                placeholder="如何称呼你（可选）"
-                value={draft.name}
-                onChange={(event) => setDraft({ ...draft, name: event.target.value })}
-              />
-              <p className="mb-0 mt-2 text-xs leading-relaxed text-ink-muted">留空则使用默认问候。</p>
-            </div>
 
             <fieldset className="m-0 min-w-0 border-0 p-0">
               <legend className="mb-2 p-0 text-sm font-medium">外观</legend>

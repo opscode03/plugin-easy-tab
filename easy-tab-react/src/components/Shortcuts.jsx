@@ -154,8 +154,7 @@ export default function Shortcuts({
 
   return (
     <section className={`reveal ${isCompact ? "mt-8 max-[480px]:mt-7" : "mt-12 max-[480px]:mt-10"} [animation-delay:220ms]`} aria-labelledby="shortcuts-title">
-      <div className="mb-5 flex items-center justify-between gap-2">
-        <h2 id="shortcuts-title" className="text-[13px] font-medium tracking-[0.08em] text-ink-muted">常用入口</h2>
+      <div className="mb-5 flex items-center justify-end gap-2">
         <div className="-mr-2 flex items-center gap-1">
           <button
             className="flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-[13px] text-ink-muted transition hover:bg-sage-soft hover:text-ink"
@@ -213,12 +212,6 @@ export default function Shortcuts({
                 role="group"
                 aria-label={`第 ${pageIndex + 1} 页，共 ${pageCount} 页`}
               >
-                {shortcuts.length === 0 && pageIndex === 0 && (
-                  <div className="col-span-full flex flex-col items-center gap-1 py-5 text-center">
-                    <strong className="text-sm font-medium">还没有常用入口</strong>
-                    <span className="text-[13px] text-ink-muted">点击“添加”收藏第一个网站。</span>
-                  </div>
-                )}
 
                 {page.map((entry) => {
                   if (entry.isAdd) {
