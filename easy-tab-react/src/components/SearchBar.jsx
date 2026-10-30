@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ArrowUpRight, ChevronDown, Search } from "lucide-react";
+import { ArrowUpRight, Search } from "lucide-react";
 import { SEARCH_ENGINES } from "../data";
+import Select from "./Select";
 
 export default function SearchBar({ engine, openTarget, onEngineChange, inputRef }) {
   const [query, setQuery] = useState("");
@@ -28,7 +29,7 @@ export default function SearchBar({ engine, openTarget, onEngineChange, inputRef
   }
 
   return (
-    <div className="reveal [animation-delay:180ms]">
+    <div className="reveal relative z-20 [animation-delay:180ms]">
       <form
         className="mt-8 flex min-h-16 items-center gap-3 rounded-[20px] border border-line bg-surface py-2 pl-5 pr-2 shadow-search transition focus-within:border-sage focus-within:ring-4 focus-within:ring-sage-soft max-[480px]:mt-7 max-[480px]:min-h-[60px] max-[480px]:gap-2 max-[480px]:pl-4"
         role="search"
@@ -54,18 +55,14 @@ export default function SearchBar({ engine, openTarget, onEngineChange, inputRef
           }}
         />
         <div className="flex shrink-0 items-center gap-2 max-[480px]:gap-1">
-          <div className="relative flex items-center">
-            <label className="sr-only" htmlFor="engine-select">选择搜索引擎</label>
-            <select
-              id="engine-select"
-              className="h-10 w-[82px] cursor-pointer appearance-none rounded-[10px] bg-transparent pl-2 pr-7 text-[13px] text-ink-muted outline-none transition hover:bg-sage-soft hover:text-ink max-[480px]:w-[68px] max-[480px]:pl-1 max-[480px]:text-xs"
-              value={engine}
-              onChange={(event) => onEngineChange(event.target.value)}
-            >
-              {SEARCH_ENGINES.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2 h-4 w-4 text-ink-muted" aria-hidden="true" />
-          </div>
+          <Select
+            id="engine-select"
+            ariaLabel="选择搜索引擎"
+            variant="ghost"
+            value={engine}
+            options={SEARCH_ENGINES.map((item) => ({ value: item.id, label: item.label }))}
+            onChange={onEngineChange}
+          />
           <button
             className="grid h-11 w-11 shrink-0 place-items-center rounded-[14px] bg-sage text-canvas transition hover:bg-sage-hover active:scale-95"
             type="submit"

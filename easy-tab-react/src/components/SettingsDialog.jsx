@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, X } from "lucide-react";
+import { X } from "lucide-react";
 import Modal from "./Modal";
+import Select from "./Select";
 import { SEARCH_ENGINES } from "../data";
 
 const THEMES = [
@@ -339,17 +340,13 @@ export default function SettingsDialog({ open, settings, onClose, onSave }) {
 
             <div>
               <label className="mb-2 block text-sm font-medium" htmlFor="settings-engine">默认搜索引擎</label>
-              <div className="relative flex items-center">
-                <select
-                  id="settings-engine"
-                  className="field-input cursor-pointer appearance-none pr-9"
-                  value={draft.engine}
-                  onChange={(event) => setDraft({ ...draft, engine: event.target.value })}
-                >
-                  {SEARCH_ENGINES.map((engine) => <option key={engine.id} value={engine.id}>{engine.label}</option>)}
-                </select>
-                <ChevronDown className="pointer-events-none absolute right-3 h-4 w-4 text-ink-muted" aria-hidden="true" />
-              </div>
+              <Select
+                id="settings-engine"
+                ariaLabel="默认搜索引擎"
+                value={draft.engine}
+                options={SEARCH_ENGINES.map((engine) => ({ value: engine.id, label: engine.label }))}
+                onChange={(engine) => setDraft({ ...draft, engine })}
+              />
             </div>
 
             <fieldset className="m-0 min-w-0 border-0 p-0">

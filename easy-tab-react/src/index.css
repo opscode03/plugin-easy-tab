@@ -119,6 +119,10 @@
   animation: side-enter 240ms ease-out;
 }
 
+.select-enter {
+  animation: select-enter 140ms ease-out;
+}
+
 .skeleton {
   animation: pulse 1.4s ease-in-out infinite;
 }
@@ -136,6 +140,11 @@
 @keyframes side-enter {
   from { opacity: 0; transform: translateX(20px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes select-enter {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulse {
