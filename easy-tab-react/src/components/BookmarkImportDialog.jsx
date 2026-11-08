@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChevronRight, Folder, FolderOpen, X } from "lucide-react";
 import Modal from "./Modal";
 import SiteIcon from "./SiteIcon";
+import { storageErrorMessage } from "../storage";
 
 function comparableUrl(url) {
   try {
@@ -45,7 +46,7 @@ function SelectionCheckbox({ indeterminate = false, ...props }) {
   return (
     <input
       ref={(input) => { if (input) input.indeterminate = indeterminate; }}
-      className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--primary)]"
+      className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]"
       type="checkbox"
       {...props}
     />
@@ -63,7 +64,7 @@ function BookmarkTreeNode({
   if (node.url) {
     return (
       <li>
-        <label className={`flex min-w-0 items-start gap-3 rounded-xl px-3 py-2.5 text-sm ${node.existing ? "opacity-50" : "cursor-pointer hover:bg-sage-soft"}`}>
+        <label className={`flex min-w-0 items-start gap-3 rounded-[8px] px-3 py-2.5 text-sm ${node.existing ? "opacity-50" : "cursor-pointer hover:bg-[var(--panel-1)]"}`}>
           <SelectionCheckbox
             checked={node.existing || selectedIds.has(node.id)}
             disabled={node.existing}
@@ -90,9 +91,9 @@ function BookmarkTreeNode({
 
   return (
     <li>
-      <div className="flex min-w-0 items-center gap-1 rounded-xl hover:bg-sage-soft">
+      <div className="flex min-w-0 items-center gap-1 rounded-[8px] hover:bg-[var(--panel-1)]">
         <button
-          className="icon-button h-9 w-9 rounded-lg"
+          className="icon-button h-9 w-9 rounded-[8px]"
           type="button"
           aria-label={`${expanded ? "收起" : "展开"}文件夹 ${node.name}`}
           aria-expanded={expanded}
@@ -115,7 +116,7 @@ function BookmarkTreeNode({
           <span className="ml-auto shrink-0 text-xs font-normal text-ink-muted">{descendants.length} 项</span>
         </label>
       </div>
-      <ul id={contentId} hidden={!expanded} className="m-0 ml-4 list-none space-y-1 border-l border-line p-0 pl-4 max-[480px]:pl-3">
+      <ul id={contentId} hidden={!expanded} className="m-0 ml-4 list-none space-y-1 border-l border-[color:var(--divider)] p-0 pl-4 max-[480px]:pl-3">
         {node.children.map((child) => (
           <BookmarkTreeNode
             key={child.id}
@@ -223,8 +224,8 @@ export default function BookmarkImportDialog({ open, shortcuts, onClose, onImpor
     try {
       await onImport(selected);
       onClose();
-    } catch {
-      setError("导入失败，请检查同步存储空间后重试。");
+    } catch (importError) {
+      setError(storageErrorMessage(importError, "导入失败，请重试。"));
     } finally {
       setImporting(false);
     }
@@ -235,7 +236,7 @@ export default function BookmarkImportDialog({ open, shortcuts, onClose, onImpor
       open={open}
       onClose={onClose}
       labelledBy="bookmark-import-title"
-      className="dialog-enter m-auto max-h-[calc(100dvh_-_32px)] w-[min(calc(100%_-_32px),520px)] max-w-[520px] rounded-3xl"
+      className="dialog-enter m-auto max-h-[calc(100dvh_-_32px)] w-[min(calc(100%_-_32px),520px)] max-w-[520px] rounded-[10px]"
     >
       <header className="dialog-header">
         <div>
@@ -251,7 +252,7 @@ export default function BookmarkImportDialog({ open, shortcuts, onClose, onImpor
         <div className="p-6 max-[480px]:p-5">
           {loading && (
             <div className="grid gap-3" aria-label="正在读取收藏夹" aria-busy="true">
-              {Array.from({ length: 4 }, (_, index) => <div key={index} className="skeleton h-14 rounded-xl bg-sage-soft" />)}
+              {Array.from({ length: 4 }, (_, index) => <div key={index} className="skeleton h-14 rounded-[8px] bg-[var(--panel-1)]" />)}
             </div>
           )}
 
@@ -266,7 +267,7 @@ export default function BookmarkImportDialog({ open, shortcuts, onClose, onImpor
                 {selectable.length > 0 && (
                   <label className="flex cursor-pointer items-center gap-2">
                     <SelectionCheckbox
-                      className="h-4 w-4 accent-[var(--primary)]"
+                      className="h-4 w-4 accent-[var(--accent)]"
                       checked={allSelected}
                       indeterminate={selectedIds.size > 0 && !allSelected}
                       onChange={toggleAll}
@@ -293,7 +294,7 @@ export default function BookmarkImportDialog({ open, shortcuts, onClose, onImpor
 
           <p className="mb-0 mt-4 min-h-5 text-[13px] leading-relaxed text-danger" role="alert">{error}</p>
         </div>
-        <footer className="flex items-center justify-between gap-4 border-t border-line p-4 px-6 pb-[max(16px,env(safe-area-inset-bottom))]">
+        <footer className="flex items-center justify-between gap-4 border-t border-[color:var(--divider)] p-4 px-6 pb-[max(16px,env(safe-area-inset-bottom))]">
           <span className="text-xs text-ink-muted">已选择 {selectedIds.size} 项</span>
           <div className="flex gap-2">
             <button className="button-secondary" type="button" onClick={onClose}>取消</button>

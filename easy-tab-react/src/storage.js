@@ -30,12 +30,29 @@ export async function loadState() {
   }
 }
 
+function createStorageError(reason) {
+  const detail = `${reason?.name || ""} ${reason?.message || reason || ""}`;
+  const error = new Error(reason?.message || "storage-write-failed");
+  error.code = /quota/i.test(detail) ? "quota" : /permission|not allowed|denied/i.test(detail) ? "permission" : "other";
+  return error;
+}
+
+export function storageErrorMessage(error, fallback = "保存失败，请重试。") {
+  if (error?.code === "quota") return "同步空间不足，请减少入口或分组后重试。";
+  if (error?.code === "permission") return "浏览器存储权限不可用，请检查扩展权限后重试。";
+  return fallback;
+}
+
 export async function saveState(state) {
   const normalized = normalizeState(state);
-  if (isSyncStorageAvailable()) {
-    await globalThis.chrome.storage.sync.set({ [STORAGE_KEY]: normalized });
-  } else {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+  try {
+    if (isSyncStorageAvailable()) {
+      await globalThis.chrome.storage.sync.set({ [STORAGE_KEY]: normalized });
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    }
+  } catch (reason) {
+    throw createStorageError(reason);
   }
   return normalized;
 }

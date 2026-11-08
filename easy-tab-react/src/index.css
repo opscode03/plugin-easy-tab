@@ -2,63 +2,109 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * 设计令牌：浅色 = Notion 式暖白极简，深色 = Linear 式暗色克制。
+ * 组件只使用这些语义变量或 Tailwind 语义色，不写散落色值。
+ */
 :root {
-  --primary: #536c5a;
-  --primary-hover: #405646;
-  --danger: #a34a44;
-  --bg: #f3f4ef;
-  --surface: #fbfbf7;
-  --shortcut-glass: rgba(251, 251, 247, 0.66);
-  --shortcut-glass-hover: rgba(251, 251, 247, 0.86);
-  --shortcut-border: rgba(83, 108, 90, 0.14);
-  --soft: #e7ece4;
-  --border: #d9ded5;
-  --text: #252a26;
-  --text-sub: #626c64;
-  --overlay: rgba(23, 29, 24, 0.32);
-  --wallpaper-overlay: rgba(243, 244, 239, 0.78);
-  --shadow-search: 0 12px 36px rgba(39, 52, 42, 0.07);
-  --shadow-dialog: 0 24px 80px rgba(23, 29, 24, 0.16);
+  /* 表面与面板：浅色用极淡暖灰叠加，深色只用半透明白叠加 */
+  --bg: #f6f5f4;
+  --surface: #fbfaf9;
+  --panel-1: rgba(55, 53, 47, 0.035);
+  --panel-2: rgba(55, 53, 47, 0.06);
+  --menu-bg: #ffffff;
+  --segment-active: #ffffff;
+  --icon-plate: rgba(55, 53, 47, 0.055);
+
+  /* 暖中性色阶：正文 / 次要 / 占位 */
+  --text: #37352f;
+  --text-sub: #6b6a66;
+  --text-faint: #6f6e6a;
+
+  /* 1px 低对比边框与分割线 */
+  --line: #e6e3df;
+  --divider: #efedeb;
+
+  /* 唯一强调色：仅主按钮、选中态、焦点环 */
+  --accent: #7a5b43;
+  --accent-hover: #664a35;
+  --accent-soft: rgba(122, 91, 67, 0.1);
+  --accent-ink: #ffffff;
+  --danger: #a84a3f;
+
+  --switch-knob: #ffffff;
+  --overlay: rgba(55, 53, 47, 0.28);
+  --wallpaper-overlay: rgba(246, 245, 244, 0.82);
+  --toast-bg: #37352f;
+  --toast-ink: #f6f5f4;
   color-scheme: light;
 }
 
 :root.dark {
-  --primary: #a9beac;
-  --primary-hover: #c3d3c4;
-  --danger: #d38a82;
-  --bg: #171b18;
-  --surface: #202620;
-  --shortcut-glass: rgba(32, 38, 32, 0.58);
-  --shortcut-glass-hover: rgba(41, 50, 43, 0.82);
-  --shortcut-border: rgba(169, 190, 172, 0.16);
-  --soft: #29322b;
-  --border: #343d35;
-  --text: #e9ece6;
-  --text-sub: #a1aaa2;
-  --overlay: rgba(5, 8, 6, 0.62);
-  --wallpaper-overlay: rgba(23, 27, 24, 0.72);
-  --shadow-search: none;
-  --shadow-dialog: none;
+  --bg: #0b0d12;
+  --surface: rgba(255, 255, 255, 0.05);
+  --panel-1: rgba(255, 255, 255, 0.03);
+  --panel-2: rgba(255, 255, 255, 0.05);
+  --menu-bg: rgba(255, 255, 255, 0.08);
+  --segment-active: rgba(255, 255, 255, 0.1);
+  --icon-plate: rgba(255, 255, 255, 0.05);
+
+  --text: #e9eaee;
+  --text-sub: #a2a7b2;
+  --text-faint: #7d8290;
+
+  --line: rgba(255, 255, 255, 0.1);
+  --divider: rgba(255, 255, 255, 0.06);
+
+  --accent: #6b8cff;
+  --accent-hover: #7f9cff;
+  --accent-soft: rgba(107, 140, 255, 0.12);
+  --accent-ink: #0b0d12;
+  --danger: #d97a7a;
+
+  --switch-knob: #e9eaee;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --wallpaper-overlay: rgba(11, 13, 18, 0.82);
+  --toast-bg: rgba(255, 255, 255, 0.08);
+  --toast-ink: #e9eaee;
   color-scheme: dark;
 }
 
 @layer base {
   html {
     min-width: 320px;
+    height: 100%;
+    overflow: hidden;
     background: var(--bg);
   }
 
   body {
     min-width: 320px;
-    min-height: 100vh;
+    height: 100%;
+    min-height: 0;
     margin: 0;
+    overflow: hidden;
     color: var(--text);
-    background-color: var(--bg);
-    background-image:
-      radial-gradient(circle at 12% 4%, var(--soft) 0, transparent 34%),
-      radial-gradient(circle at 90% 96%, var(--soft) 0, transparent 28%);
+    background: var(--bg);
     font-family: theme("fontFamily.body");
     -webkit-font-smoothing: antialiased;
+    /* 全局禁用左键拖选；输入类控件在下方显式恢复 */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* 搜索框、设置输入、导出文件名等需要编辑或复制的控件恢复文本选中 */
+  input,
+  textarea,
+  select,
+  [contenteditable="true"],
+  .selectable {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  #root {
+    height: 100%;
   }
 
   button,
@@ -68,49 +114,224 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  :where(button, a, input, select):focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 3px;
+  /* 焦点环：2px 强调色 + 2px 偏移，避免被 1px 边框吞掉 */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* 搜索框内部输入不绘制自身边框与焦点框，焦点环统一由外层容器承担 */
+  #search-input,
+  #search-input:focus,
+  #search-input:focus-visible {
+    border: 0;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  form[role="search"]:has(#search-input:focus) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   ::selection {
     color: var(--text);
-    background: var(--soft);
+    background: var(--accent-soft);
   }
 }
 
 @layer components {
   .icon-button {
-    @apply inline-grid h-10 w-10 shrink-0 place-items-center rounded-xl text-ink-muted transition-colors hover:bg-sage-soft hover:text-ink;
+    @apply inline-grid h-10 w-10 shrink-0 place-items-center rounded-[8px] border border-[color:var(--line)] text-ink-muted transition-colors hover:bg-[var(--panel-1)] hover:text-ink;
   }
 
   .button {
-    @apply min-h-11 rounded-[10px] px-4 text-sm font-medium transition active:scale-[0.98] disabled:cursor-wait disabled:opacity-50;
+    @apply min-h-10 rounded-[8px] px-4 text-sm font-medium transition-colors active:opacity-90 disabled:cursor-wait disabled:opacity-50;
   }
 
   .button-primary {
-    @apply button bg-sage text-canvas hover:bg-sage-hover;
+    @apply button bg-[var(--accent)] text-[var(--accent-ink)] hover:bg-[var(--accent-hover)];
   }
 
   .button-secondary {
-    @apply button border border-line text-ink hover:bg-sage-soft;
+    @apply button border border-[color:var(--line)] bg-transparent text-ink hover:bg-[var(--panel-1)];
   }
 
   .field-input {
-    @apply h-11 w-full rounded-[10px] border border-line bg-canvas px-3 text-sm text-ink outline-none transition placeholder:text-ink-muted hover:border-sage focus:border-sage focus:ring-[3px] focus:ring-sage-soft;
+    @apply h-10 w-full rounded-[8px] border border-[color:var(--line)] bg-transparent px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-faint hover:border-[color:var(--text-faint)] focus:border-[color:var(--accent)];
   }
 
   .dialog-header {
-    @apply flex items-start justify-between gap-4 border-b border-line p-6 max-[480px]:p-5;
+    @apply flex items-start justify-between gap-4 border-b border-[color:var(--divider)] p-6 max-[480px]:p-5;
   }
 
   .dialog-title {
-    @apply mt-1 font-display text-2xl font-medium leading-tight;
+    @apply mt-1 font-display text-2xl font-medium leading-tight text-ink;
   }
 
   .dialog-eyebrow {
-    @apply m-0 text-xs font-semibold tracking-[0.12em] text-sage;
+    @apply m-0 text-[11px] font-medium tracking-[0.08em] text-ink-faint;
   }
+
+  .settings-section {
+    @apply m-0 min-w-0 border-0 p-0;
+  }
+
+  .settings-section + .settings-section {
+    @apply mt-6 border-t pt-6;
+    border-color: var(--divider);
+  }
+
+  .settings-heading {
+    @apply m-0 mb-3 block p-0 text-[11px] font-medium tracking-[0.08em] text-ink-muted;
+  }
+
+  .settings-hint {
+    @apply m-0 mt-2 block text-[11px] leading-relaxed text-ink-muted;
+  }
+
+  .segmented {
+    @apply grid gap-1 rounded-[8px] border p-1;
+    border-color: var(--line);
+    background: var(--panel-1);
+  }
+
+  .segment-label {
+    @apply grid min-h-9 cursor-pointer place-items-center rounded-[6px] px-1 text-[13px] text-ink-muted transition-colors;
+  }
+
+  .peer:checked ~ .segment-label {
+    color: var(--text);
+    background: var(--segment-active);
+    font-weight: 500;
+  }
+
+  .peer:focus-visible ~ .segment-label {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .switch-track {
+    position: relative;
+    display: block;
+    height: 22px;
+    width: 40px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel-2);
+    transition: background-color 160ms ease, border-color 160ms ease;
+  }
+
+  .switch-track::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    height: 16px;
+    width: 16px;
+    border-radius: 999px;
+    background: var(--switch-knob);
+    transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .peer:checked ~ .switch-track {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .peer:checked ~ .switch-track::after {
+    transform: translateX(18px);
+  }
+
+  .peer:focus-visible ~ .switch-track {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .tile-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    padding-block: clamp(6px, 1.2vh, 12px);
+    padding-inline: 8px;
+    gap: clamp(5px, 1vh, 9px);
+  }
+
+  .tile-body-compact {
+    padding-block: clamp(4px, 1vh, 8px);
+    gap: clamp(4px, 0.8vh, 8px);
+  }
+
+  .tile-icon {
+    display: grid;
+    height: clamp(34px, 5.4vh, 50px);
+    width: clamp(34px, 5.4vh, 50px);
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: 10px;
+    background: var(--icon-plate);
+    transition: background-color 150ms ease;
+  }
+
+  .tile-icon-compact {
+    height: clamp(30px, 4.4vh, 40px);
+    width: clamp(30px, 4.4vh, 40px);
+    border-radius: 8px;
+  }
+
+  .tile-glyph {
+    height: 58%;
+    width: 58%;
+    object-fit: contain;
+  }
+
+  .tile-name {
+    @apply max-w-full truncate text-[13px] text-ink;
+  }
+
+  .drag-source {
+    opacity: 0.4;
+  }
+
+  /* 可拖拽元素单独禁用触控手势，避免整页失去滚动 */
+  .drag-handle {
+    touch-action: none;
+  }
+
+  /* 拖拽浮层：轻微缩放与半透明，不加阴影 */
+  .drag-overlay {
+    cursor: grabbing;
+    opacity: 0.9;
+    transform: scale(1.02);
+    transform-origin: center;
+  }
+}
+
+/* 拖拽期间全局兜底光标，避免被中间元素覆盖 */
+.is-dragging,
+.is-dragging * {
+  cursor: grabbing !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drag-overlay {
+    transform: none;
+  }
+}
+
+/* 时钟数字：等宽数字，避免秒数跳动时宽度变化 */
+.clock-digits {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
 }
 
 .reveal {
@@ -134,13 +355,13 @@
 }
 
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes dialog-enter {
-  from { opacity: 0; transform: translateY(12px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes side-enter {

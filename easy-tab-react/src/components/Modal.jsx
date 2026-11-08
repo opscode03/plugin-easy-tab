@@ -10,16 +10,14 @@ export default function Modal({ open, onClose, labelledBy, className = "", child
   }, [open]);
 
   function handleBackdropClick(event) {
-    const dialog = dialogRef.current;
-    const rect = dialog.getBoundingClientRect();
-    const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
-    if (outside) onClose();
+    // 键盘激活按钮时 click 坐标为 0,0，仅点击对话框自身（遮罩）才关闭
+    if (event.target === dialogRef.current) onClose();
   }
 
   return (
     <dialog
       ref={dialogRef}
-      className={`overflow-hidden border border-line bg-surface p-0 text-ink shadow-dialog backdrop:bg-[var(--overlay)] ${className}`}
+      className={`overflow-hidden border border-[color:var(--line)] bg-surface p-0 text-ink backdrop:bg-[var(--overlay)] ${className}`}
       aria-labelledby={labelledBy}
       onCancel={(event) => {
         event.preventDefault();

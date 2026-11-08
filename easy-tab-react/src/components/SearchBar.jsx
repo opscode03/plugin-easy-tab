@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowUpRight, Search } from "lucide-react";
 import { SEARCH_ENGINES } from "../data";
 import Select from "./Select";
 
-export default function SearchBar({ engine, openTarget, onEngineChange, inputRef }) {
+export default function SearchBar({ engine, openTarget, onEngineChange, inputRef, seed }) {
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const selectedEngine = SEARCH_ENGINES.find((item) => item.id === engine) || SEARCH_ENGINES[0];
   const isAi = selectedEngine.type === "ai";
+
+  useEffect(() => {
+    if (!seed) return;
+    setQuery(seed.text);
+    setError("");
+    const input = inputRef.current;
+    input?.focus();
+    input?.setSelectionRange(seed.text.length, seed.text.length);
+  }, [seed, inputRef]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -32,17 +41,17 @@ export default function SearchBar({ engine, openTarget, onEngineChange, inputRef
   return (
     <div className="reveal relative z-20 [animation-delay:180ms]">
       <form
-        className="mt-8 flex min-h-16 items-center gap-3 rounded-[20px] border border-line bg-surface py-2 pl-5 pr-2 shadow-search transition focus-within:border-sage focus-within:ring-4 focus-within:ring-sage-soft max-[480px]:mt-7 max-[480px]:min-h-[60px] max-[480px]:gap-2 max-[480px]:pl-4"
+        className="mt-3 flex min-h-[clamp(44px,6vh,56px)] items-center gap-2.5 rounded-[10px] border border-[color:var(--line)] bg-surface py-1.5 pl-4 pr-1.5 transition-colors max-[480px]:mt-2 max-[480px]:gap-2 max-[480px]:py-1"
         role="search"
         noValidate
         onSubmit={handleSubmit}
       >
-        <Search className="h-5 w-5 shrink-0 text-ink-muted" strokeWidth={1.7} aria-hidden="true" />
+        <Search className="h-[18px] w-[18px] shrink-0 text-ink-muted" strokeWidth={1.7} aria-hidden="true" />
         <label className="sr-only" htmlFor="search-input">{isAi ? "输入问题，开始 AI 对话" : "搜索或输入网址"}</label>
         <input
           ref={inputRef}
           id="search-input"
-          className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-ink-muted"
+          className="min-w-0 flex-1 bg-transparent text-sm text-ink placeholder:text-ink-muted"
           type="text"
           value={query}
           placeholder={isAi ? "输入问题，开始 AI 对话" : "搜索或输入网址"}
@@ -53,6 +62,14 @@ export default function SearchBar({ engine, openTarget, onEngineChange, inputRef
           onChange={(event) => {
             setQuery(event.target.value);
             setError("");
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== "Escape" || event.isComposing) return;
+            event.preventDefault();
+            event.stopPropagation();
+            setQuery("");
+            setError("");
+            inputRef.current?.blur();
           }}
         />
         <div className="flex shrink-0 items-center gap-2 max-[480px]:gap-1">
@@ -65,18 +82,20 @@ export default function SearchBar({ engine, openTarget, onEngineChange, inputRef
             onChange={onEngineChange}
           />
           <button
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-[14px] bg-sage text-canvas transition hover:bg-sage-hover active:scale-95"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-[8px] bg-[var(--accent)] text-[var(--accent-ink)] transition-colors hover:bg-[var(--accent-hover)] active:opacity-90"
             type="submit"
             aria-label={isAi ? "打开 AI 对话" : "搜索"}
             title={isAi ? "打开 AI 对话" : "搜索"}
           >
-            <ArrowUpRight className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+            <ArrowUpRight className="h-[18px] w-[18px]" strokeWidth={1.8} aria-hidden="true" />
           </button>
         </div>
       </form>
-      <p id="search-error" className="mx-1 mb-[-28px] mt-2 text-[13px] text-danger" role="alert">
-        {error}
-      </p>
+      {error && (
+        <p id="search-error" className="mx-1 mt-2 text-[13px] leading-relaxed text-danger" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

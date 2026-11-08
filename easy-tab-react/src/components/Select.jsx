@@ -3,7 +3,7 @@ import { Check, ChevronDown } from "lucide-react";
 
 const TRIGGER_VARIANTS = {
   field: "field-input pr-9",
-  ghost: "h-10 w-[96px] rounded-[10px] bg-transparent pl-2 pr-7 text-[13px] text-ink-muted outline-none transition hover:bg-sage-soft hover:text-ink focus-visible:bg-sage-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-sage max-[480px]:w-[84px] max-[480px]:pl-1 max-[480px]:text-xs"
+  ghost: "h-10 w-[96px] rounded-[8px] bg-transparent pl-2 pr-7 text-[13px] text-ink-muted outline-none transition-colors hover:bg-[var(--panel-1)] hover:text-ink focus-visible:bg-[var(--panel-1)] focus-visible:text-ink max-[480px]:w-[84px] max-[480px]:pl-1 max-[480px]:text-xs"
 };
 
 const LIST_VARIANTS = {
@@ -123,7 +123,7 @@ export default function Select({ id, value, options, onChange, ariaLabel, varian
         <ul
           ref={listRef}
           id={listboxId}
-          className={`select-enter absolute top-[calc(100%_+_6px)] z-50 max-h-60 overflow-y-auto rounded-xl border border-line bg-surface p-1.5 text-ink shadow-dialog outline-none focus-visible:ring-2 focus-visible:ring-sage ${LIST_VARIANTS[variant]}`}
+          className={`select-enter absolute top-[calc(100%_+_6px)] z-50 max-h-60 overflow-y-auto rounded-[8px] border border-[color:var(--line)] bg-[var(--menu-bg)] p-1.5 text-ink outline-none ${LIST_VARIANTS[variant]}`}
           role="listbox"
           tabIndex={-1}
           aria-label={ariaLabel}
@@ -138,14 +138,14 @@ export default function Select({ id, value, options, onChange, ariaLabel, varian
                 ref={(node) => { optionRefs.current[index] = node; }}
                 id={`${listboxId}-option-${index}`}
                 key={option.value}
-                className={`flex min-h-9 cursor-pointer items-center justify-between gap-3 rounded-lg px-3 text-[13px] transition-colors ${isActive ? "bg-sage-soft text-ink" : "text-ink-muted"} ${isSelected ? "font-medium text-ink" : ""}`}
+                className={`flex min-h-9 cursor-pointer items-center justify-between gap-3 rounded-[6px] px-3 text-[13px] transition-colors ${isActive ? "bg-[var(--panel-2)] text-ink" : "text-ink-muted"} ${isSelected ? "font-medium text-ink" : ""}`}
                 role="option"
                 aria-selected={isSelected}
                 onMouseMove={() => setActiveIndex(index)}
                 onClick={() => handleSelect(option.value)}
               >
                 <span className="truncate">{option.label}</span>
-                {isSelected && <Check className="h-4 w-4 shrink-0 text-sage" strokeWidth={2} aria-hidden="true" />}
+                {isSelected && <Check className="h-4 w-4 shrink-0 text-accent" strokeWidth={2} aria-hidden="true" />}
               </li>
             );
           })}

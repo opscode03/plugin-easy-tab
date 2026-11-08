@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Modal from "./Modal";
 import { getMark, normalizeUrl } from "../data";
+import { storageErrorMessage } from "../storage";
 
 export default function ShortcutDialog({ open, shortcut, onClose, onSave }) {
   const [name, setName] = useState("");
@@ -52,8 +53,8 @@ export default function ShortcutDialog({ open, shortcut, onClose, onSave }) {
         mark: getMark(trimmedName)
       });
       onClose();
-    } catch {
-      showError("保存失败，请检查浏览器存储权限后重试。", "shortcut-url");
+    } catch (saveError) {
+      showError(storageErrorMessage(saveError, "保存失败，请重试。"), "shortcut-url");
     } finally {
       setSaving(false);
     }
@@ -64,7 +65,7 @@ export default function ShortcutDialog({ open, shortcut, onClose, onSave }) {
       open={open}
       onClose={onClose}
       labelledBy="shortcut-dialog-title"
-      className="dialog-enter m-auto max-h-[calc(100dvh_-_32px)] w-[min(calc(100%_-_32px),440px)] max-w-[440px] rounded-3xl"
+      className="dialog-enter m-auto max-h-[calc(100dvh_-_32px)] w-[min(calc(100%_-_32px),440px)] max-w-[440px] rounded-[10px]"
     >
       <header className="dialog-header">
         <div>
@@ -120,7 +121,7 @@ export default function ShortcutDialog({ open, shortcut, onClose, onSave }) {
           </div>
           <p id="shortcut-form-error" className="m-0 text-[13px] leading-relaxed text-danger" role="alert">{error}</p>
         </div>
-        <footer className="flex justify-end gap-2 border-t border-line p-4 px-6 pb-[max(16px,env(safe-area-inset-bottom))]">
+        <footer className="flex justify-end gap-2 border-t border-[color:var(--divider)] p-4 px-6 pb-[max(16px,env(safe-area-inset-bottom))]">
           <button className="button-secondary" type="button" onClick={onClose}>取消</button>
           <button className="button-primary" type="submit" disabled={saving} aria-busy={saving}>
             {saving ? "保存中…" : "保存入口"}
